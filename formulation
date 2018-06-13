@@ -1,0 +1,5 @@
+#### Formulation 
+
+The code allows to estimate the friction factor on the internal wall of a duct by using the Colebrook-White equation. 
+Once the input parameters are added the equation is solved iteratively.
+Moreover the code estimate the head loss inside the tube by using the Darcy Weissbach Equation.
