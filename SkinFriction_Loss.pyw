@@ -271,7 +271,7 @@ frame00.place(x=15,y=yS1-8)
 frame01 = Frame(width=240,height=220, colormap="new",relief=SUNKEN,bd=2)
 frame01.place(x=15,y=yS1+180)
 
-w_0 = Label(root,text='  ___ Physic and Kinetic Parameters  __',font=f_BO9)
+w_0 = Label(root,text='___ Physic and Kinetic Parameters ___',font=f_BO9)
 w_0.place(x=8,y=2)
 
 f = IntVar()
@@ -326,8 +326,8 @@ Q0.place(x=XIN,y=5*yS1)
 Q0.insert(END, 0)
 
 #Epsilon selection
-l4_1 = Label(root,text='  ______ Geometric Parameters  _______',font=f_BO9)
-l4_1.place(x=8,y=4*yS2-30)
+l4_1 = Label(root,text='_____ Geometric Parameters _______',font=f_BO9)
+l4_1.place(x=14,y=4*yS2-30)
 
 l4_2 = Radiobutton(root,text="Wall roughness ",value=1,font=f_BO9)
 l4_2.place(x=31,y=4*yS2+10)
@@ -397,8 +397,8 @@ s5.place(x=280,y=130+yS1)
 s5.config(height=1, width=15)
 
 #Results
-frame0 = Frame(width=220,height=430, bg="grey", colormap="new",relief=SUNKEN,bd=2)
-frame0.place(x=440,y=yR)
+frame0 = Frame(width=234,height=430, bg="grey", colormap="new",relief=SUNKEN,bd=2)
+frame0.place(x=435,y=yR)
 
 lframe1 = Label(root,text="Density [kg/m^3]",font=f_BO9, bg="grey")
 lframe1.place(x=495,y=yR+5)
