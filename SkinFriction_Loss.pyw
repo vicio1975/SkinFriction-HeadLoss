@@ -6,7 +6,7 @@ email:  v.sammartano@gmail.com
 import numpy as num
 import tkinter as tk
 from tkinter import  messagebox
-from PIL import ImageTk, Image
+#from PIL import ImageTk, Image
 #import os
 
 #Tkinter Frame
@@ -61,7 +61,6 @@ def fluid():
         mi = ba * (t**1.5)/(t+sa) #Dinamic Viscosity  Pa s = kg m^-1 s^-1
         ni = mi/rot         #Cinematic Viscosity  m2·s-1
         FpA = [rot,gamma_t,mi,ni]
-        FF = "Air"
         Fp = FpA
 
     if F == 2:
@@ -77,7 +76,6 @@ def fluid():
         mi = 2.414*(10**-5)*10**(247.8/(t-140)) #Dinamic Viscosity  Pa s = kg m^-1 s^-1
         ni = mi/rot         #Kinetic Viscosity  m2·s-1
         FpW = [rot,gamma_t,mi,ni]
-        FF = "Water"
         Fp = FpW
 
     L0 = tk.Label(root)
@@ -313,7 +311,7 @@ l2_1.place(x=205,y=4*yS1)
 
 l3 = tk.Radiobutton(root,text="Flow Rate",padx = 0,variable=modF,value=2,font=f_BO9)
 l3.place(x=31,y=5*yS1)
-l3_1 = tk.Label(root,text="[cms]",padx = 0,font=f_BO9)
+l3_1 = tk.Label(root,text="[m\xb3/s]",padx = 0,font=f_BO9)
 l3_1.place(x=205,y=5*yS1)
 
 V0_ = tk.StringVar()
@@ -401,7 +399,7 @@ s5.config(height=1, width=15)
 frame0 = tk.Frame(width=234,height=430, bg="grey", colormap="new",relief="sunken",bd=2)
 frame0.place(x=435,y=yR)
 
-lframe1 = tk.Label(root,text="Density [kg/m^3]",font=f_BO9, bg="grey")
+lframe1 = tk.Label(root,text="Density [kg/m\xb3]",font=f_BO9, bg="grey")
 lframe1.place(x=495,y=yR+5)
 frame1 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
 frame1.place(x=450,y=yR+25)
@@ -411,7 +409,7 @@ lframe2.place(x=478,y=yR+65)
 frame2 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
 frame2.place(x=450,y=yR+85)
 
-lframe3 = tk.Label(root,text="Kinematic viscosity [m^2/s]",font=f_BO9, bg="grey")
+lframe3 = tk.Label(root,text="Kinematic viscosity [m\xb2/s]",font=f_BO9, bg="grey")
 lframe3.place(x=468,y=yR+125)
 frame3 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
 frame3.place(x=450,y=yR+145)
