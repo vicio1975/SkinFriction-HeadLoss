@@ -95,7 +95,7 @@ def ColeBrook(EPS,dc,Re,V0):
     lamb_= 0
 
     #First step - Hyp. fully turbulent flow
-    turbTerm =  EPS/(3.7*dc) #turbulent term
+    turbTerm =  EPS/(3.71*dc) #turbulent term
     lambInf = 0.25 * (num.log10(turbTerm)**2)**-1
     lamI = lambInf #First value for the friction coefficient
     errLam = 999 
