@@ -114,7 +114,7 @@ def ColeBrook(EPS,dc,Re,V0):
     L5 = tk.Label(root,text=lamb_,font=f_BO10,bg="white",width=22)
     L5.place(x=455,y=yR+213)
 
-    RE = "{:12.10e}".format(Re)
+    RE = "{:12.2f}".format(Re)
     L6 = tk.Label(root,text=RE,font=f_BO10,bg="white",width=22)
     L6.place(x=455,y=yR+270)
     #Darcy Module for loss estimation
