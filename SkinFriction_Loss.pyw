@@ -78,13 +78,13 @@ def fluid():
         FpW = [rot,gamma_t,mi,ni]
         Fp = FpW
 
-    L0 = tk.Label(root)
-    L0.config(text="{:10.4e}".format(Fp[0]),font=f_BO10,bg="white",width=22)
+    L0 = tk.Label(root) #density
+    L0.config(text="{:10.3f}".format(Fp[0]),font=f_BO10,bg="white",width=22)
     L0.place(x=455,y=yR+32)   
-    L1 = tk.Label(root)
+    L1 = tk.Label(root) #dynamic viscosity
     L1.config(text="{:10.4e}".format(Fp[2]),font=f_BO10,bg="white",width=22)
     L1.place(x=455,y=yR+91)   
-    L2 = tk.Label(root)
+    L2 = tk.Label(root) #kinematic viscosity
     L2.config(text="{:10.4e}".format(Fp[3]),font=f_BO10,bg="white",width=22)
     L2.place(x=455,y=yR+152)
     #print(Fp)
