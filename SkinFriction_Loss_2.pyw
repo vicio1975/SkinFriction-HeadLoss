@@ -71,7 +71,7 @@ def fluid():
         #Water - Kell formulation
         ro = 999.83952
         At = 1 + (16.879850*10**-3)*T #constant to be used in the Kell formula
-            #rot is the water density as function of temperature [Kg/mc]
+            #rot is the water density as function of temperature [Kg/e]
         rot =  (ro + (16.945176*T) - (7.987040*10**-3)*(T**2.0) -
              +(46.17046*10**-6)*(T**3.0) + (105.56302*10**-9)*(T**4.0)-
                     +(280.54253*10**-12)*(T**5.0))/At
@@ -334,6 +334,11 @@ Q0_ = tk.StringVar()
 Q0 = tk.Entry(root,textvariable=Q0_ , width=6,justify="center")
 Q0.place(x=XIN,y=5*yS1)
 Q0.insert("end", 0)
+
+Q1_ = tk.StringVar()
+Q1 = tk.Entry(root,textvariable=Q0_ , width=6,justify="center")
+Q1.place(x=XIN,y=5*yS1)
+Q1.insert("end", 0)
 
 #Epsilon selection
 l4_1 = tk.Label(root,text='_____ Geometric Parameters _______',font=f_BO9)
