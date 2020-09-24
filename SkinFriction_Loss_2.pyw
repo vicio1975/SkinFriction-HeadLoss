@@ -94,7 +94,7 @@ def fluid():
     #print(Fp)
     return Fp
     
-def ColeBrook(EPS,dc,Re,V0):
+def UFFF(EPS,dc,Re,V0):
     global lamb_,RE
     lamb_= 0
 
@@ -123,6 +123,33 @@ def ColeBrook(EPS,dc,Re,V0):
     L6.place(x=455,y=yR+270)
     #Darcy Module for loss estimation
     Darcy(LAMB,dc,V0)
+    
+def UFFF2(EPS,dc,Re,V0):
+    #UNIFIED FLOW FRICTION FORMULATION
+    global lamb_,RE
+    lamb_= 0
+    #switching functions 
+    y1 = 1 - 1048/((4.489/10**20) * Re**6 * (0.148 * Re - (2.306 * Re)/(0.003133 * Re + 9.646)) + 1050)
+    y2 = 1.012 - 1/(0.02521 * Re * EPS + 2.202)          
+    y3 = 1 - 1/(0.000389 * Re**2 * EPS**2 + 0.0000239 * Re + 1.61)          
+    
+    a = 64/Re  #laminar flow
+    c1 = 0.0032 + 0.221/(Re**0.237) #smooth turb flow
+    c3 = 0.11 * EPS**0.25  #fully dev rough turbulent flow
+
+    lamb_ = (a * ( 1 - y1 )) + (c1 * (y1 - y3)) + (c3 * y2)
+
+    LAMB = lamb_ 
+    lamb_ = "{:14.14f}".format(lamb_)
+    L5 = tk.Label(root,text=lamb_,font=f_BO10,bg="white",width=22)
+    L5.place(x=455,y=yR+213)
+
+    RE = "{:12.2f}".format(Re)
+    L6 = tk.Label(root,text=RE,font=f_BO10,bg="white",width=22)
+    L6.place(x=455,y=yR+270)
+    #Darcy Module for loss estimation
+    Darcy(LAMB,dc,V0)    
+    
     
 def Darcy(lamb,D,V):
     # The Darcy function allows one to estimate the head Loss per unit lenght
@@ -173,7 +200,7 @@ def calC():
         if V0 == 0:      
             messagebox.showwarning("Warning","The flow rate has to be greater than 0!")
     Re = V0 * (dc/ni)
-    ColeBrook(EPS,dc,Re,V0)
+    UFFF(EPS,dc,Re,V0)
 
 def calR():
     fp = fluid()
@@ -202,8 +229,39 @@ def calR():
         if V0 == 0:      
             messagebox.showwarning("Warning","The flow rate has to be greater than 0!")
     Re = V0 * (dc/ni)
-    ColeBrook(EPS,dc,Re,V0)
-
+    UFFF(EPS,dc,Re,V0)
+    
+    
+def calGen():
+    fp = fluid()
+    ni = fp[3]
+    modF_ = modF.get()
+    Q0 = float(Q0_.get())
+    sA = float(W_.get())    
+    sB = float(H_.get())    
+    Ar = sA * sB   # area of the section
+    if Ar==0: 
+        messagebox.showwarning("Warning","The width and height have be greater than 0!")
+    Pr = 2 * (sA + sB) # perimeter of the section
+    dc = 4 * (Ar/Pr) #hydraulic diameter
+    EPS = float(eps_.get())
+    EPS = EPS * 1e-3 # absolute wall roughness
+    if EPS==0: 
+        messagebox.showwarning("Warning","The absolute roughness has to be greater than 0!")
+    if modF_ == 1:
+        #print("velocity mode!")
+        V0 = float(V0_.get())
+        if V0 == 0:
+            messagebox.showwarning("Warning","The velocity has to be greater than 0!")
+    if modF_ == 2:
+       # print("flow rate mode!")
+        V0 = Q0/Ar
+        if V0 == 0:      
+            messagebox.showwarning("Warning","The flow rate has to be greater than 0!")
+    Re = V0 * (dc/ni)
+    UFFF(EPS,dc,Re,V0)    
+    
+#has to be modified
 def CAL():
     modF_ = modF.get()
     sec_ = sec.get()
