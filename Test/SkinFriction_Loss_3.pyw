@@ -9,10 +9,6 @@ from tkinter import  messagebox
 from PIL import ImageTk, Image
 #import os
 
-###spostare blocco parametri per inserire portata in cfm
-
-
-
 #Tkinter Frame
 root = tk.Tk()
 root.geometry("700x550+100+50")
@@ -119,8 +115,7 @@ def UFFF1(EPS,dc,Re,V0):
     lamb_ = "{:14.14f}".format(lamb_)
     L5 = tk.Label(root,text=lamb_,font=f_BO10,bg="white",width=22)
     L5.place(x=455,y=yR+213)
-    model = tk.Label(root,text="Colebrook equation", font=f_BO10)
-    model.place(x=45,y=yR+433)    
+
     RE = "{:12.2f}".format(Re)
     L6 = tk.Label(root,text=RE,font=f_BO10,bg="white",width=22)
     L6.place(x=455,y=yR+270)
@@ -147,8 +142,7 @@ def UFFF(EPS,dc,Re,V0):
     lamb_ = "{:14.14f}".format(lamb_)
     L5 = tk.Label(root,text=lamb_,font=f_BO10,bg="white",width=22)
     L5.place(x=455,y=yR+213)
-    model = tk.Label(root,text="SixParam equation", font=f_BO10)
-    model.place(x=45,y=yR+433)    
+
     RE = "{:12.2f}".format(Re)
     L6 = tk.Label(root,text=RE,font=f_BO10,bg="white",width=22)
     L6.place(x=455,y=yR+270)
@@ -175,7 +169,6 @@ def TL(Loss):
 
     L8.place(x=455,y=yR+390)
     L8_2.place(x=455,y=yR+450)
-    
     
 def calC():
     fp = fluid()
@@ -235,8 +228,7 @@ def calR():
     Re = V0 * (dc/ni)
     UFFF(EPS,dc,Re,V0)
     
-    
-def calGen():
+def calGen(): #new geometry type
     fp = fluid()
     ni = fp[3]
     modF_ = modF.get()
@@ -283,8 +275,7 @@ def CAL():
         calR()
     elif sec_  == 0:
         messagebox.showwarning("Warning","You must select the kind of section!")
-    
-
+        
 def EXA():
 
     choices = """
@@ -335,188 +326,180 @@ def EXA():
 
 ###########Main    
 ###Fluid Selection
-frame00 = tk.Frame(width=240,height=152, colormap="new",relief="sunken",bd=2)
-frame00.place(x=15,y=yS1-8)
-
-frame01 = tk.Frame(width=240,height=220, colormap="new",relief="sunken",bd=2)
-frame01.place(x=15,y=yS1+180)
-
-w_0 = tk.Label(root,text='___ Physic and Kinetic Parameters ___',font=f_BO9)
-w_0.place(x=8,y=2)
+frame00 = tk.LabelFrame(root,padx=22, pady=40, text = "Physic and Kinetic Parameters")
+frame00.grid(row=0, column= 0,padx=30,pady=5)
 
 f = tk.IntVar()
-f2 = tk.Radiobutton(root,text="Air",variable=f,value=1,command=fluid,font=f_BO9,
-                    indicatoron=0,height=3,width=12)
-f2.place(x=38,y=yS1*2)
-f3 = tk.Radiobutton(root,text="Water",variable=f,value=2,command=fluid,font=f_BO9,
-                    indicatoron=0,height=3,width=12)
-f3.place(x=140,y=yS1*2)
+f2 = tk.Radiobutton(frame00,text="Air",variable=f,value=1,command=fluid,font=f_BO9,
+                     indicatoron=0,height=3,width=12,padx=5)
+f2.grid(row=1,column=0)
 
-t0 = tk.Radiobutton(root,text="Temperature",value=1,font=f_BO9)
-t0.place(x=31,y=yS1)
+f3 = tk.Radiobutton(frame00,text="Water",variable=f,value=2,command=fluid,font=f_BO9,
+                    indicatoron=0,height=3,width=12)
+f3.grid(row=1,column=1)
+
+
+t0 = tk.Radiobutton(frame00,text="Temperature",value=1,font=f_BO9)
+t0.grid(row = 0, column = 0)
 t0.select()
-t0_1 = tk.Label(root,text="[°C]",padx = 0,font=f_BO9)
-t0_1.place(x=205,y=yS1)
+t0_1 = tk.Label(frame00,text="[°C]",padx = 5,font=f_BO9)
+t0_1.grid(row = 0, column = 2)
 
 T_ = tk.StringVar()
-t1 = tk.Entry(root,textvariable=T_ , width=6,justify="center")
-t1.place(x=XIN,y=yS1)
-t1.insert("end", 25)
+t1 = tk.Entry(frame00,textvariable=T_ , width=6, justify="center")
+t1.grid(row = 0, column=1)
+t1.insert("end", 20)
 
-L0 = tk.Radiobutton(root,text="Duct Lenght",padx = 0,value=1,font=f_BO9)
-L0.place(x=31,y=290+yS)
-L0.select()
-L00 = tk.Label(root,text="[m]",font=f_BO9,justify="right")
-L00.place(x=205,y=290+yS)
-
-L_ = tk.StringVar()
-L1 = tk.Entry(root,textvariable=L_ , width=6,justify="center")
-L1.place(x=XIN,y=290+yS)
-L1.insert("end",1)
-
-
-#Estimation Method V or Q
+##Estimation Method V or Q
 modF = tk.IntVar()
-l2 = tk.Radiobutton(root,text="Mean Velocity",padx = 0,variable=modF,value=1,font=f_BO9)
-l2.place(x=31,y=4*yS1)
-l2_1 = tk.Label(root,text="[m/s]",padx = 0,font=f_BO9)
-l2_1.place(x=205,y=4*yS1)
-
-l3 = tk.Radiobutton(root,text="Flow Rate",padx = 0,variable=modF,value=2,font=f_BO9)
-l3.place(x=31,y=5*yS1)
-l3_1 = tk.Label(root,text="[m\xb3/s]",padx = 0,font=f_BO9)
-l3_1.place(x=205,y=5*yS1)
-
+l2 = tk.Radiobutton(frame00,text="Mean Velocity",padx = 10,variable=modF,value=1,font=f_BO9)
+l2.grid(row=2,column=0)
+l2_1 = tk.Label(frame00,text="[m/s]",padx = 5,font=f_BO9)
+l2_1.grid(row=2,column=2)
 V0_ = tk.StringVar()
-v0 = tk.Entry(root,textvariable=V0_ , width=6,justify="center")
-v0.place(x=XIN,y=4*yS1)
-v0.insert("end", 0)
+v0 = tk.Entry(frame00,textvariable=V0_ , width=6,justify="center")
+v0.grid(row=2,column=1)
+v0.insert("end", 00)
 
+
+l3 = tk.Radiobutton(frame00,text="Flow Rate",padx = 10,variable=modF,value=2,font=f_BO9)
+l3.grid(row=3,column=0)
+l3_1 = tk.Label(frame00,text="[m\xb3/s]", padx = 5,font=f_BO9)
+l3_1.grid(row=3,column=2)
 Q0_ = tk.StringVar()
-Q0 = tk.Entry(root,textvariable=Q0_ , width=6,justify="center")
-Q0.place(x=XIN,y=5*yS1)
+Q0 = tk.Entry(frame00,textvariable=Q0_ , width=6,justify="center")
+Q0.grid(row=3,column=1)
 Q0.insert("end", 0)
 
-Q1_ = tk.StringVar()
-Q1 = tk.Entry(root,textvariable=Q0_ , width=6,justify="center")
-Q1.place(x=XIN,y=5*yS1)
-Q1.insert("end", 0)
 
-#Epsilon selection
-l4_1 = tk.Label(root,text='_____ Geometric Parameters _______',font=f_BO9)
-l4_1.place(x=14,y=4*yS2-30)
+# L0 = tk.Radiobutton(root,text="Duct Lenght",padx = 0,value=1,font=f_BO9)
+# L0.place(x=31,y=290+yS)
+# L0.select()
+# L00 = tk.Label(root,text="[m]",font=f_BO9,justify="right")
+# L00.place(x=205,y=290+yS)
 
-l4_2 = tk.Radiobutton(root,text="Wall roughness ",value=1,font=f_BO9)
-l4_2.place(x=31,y=4*yS2+10)
-l4_2.select()
-l4_3 = tk.Label(root,text="[mm]",font=f_BO9)
-l4_3.place(x=205,y=4*yS2+10)
-
-eps_ = tk.StringVar()
-eps = tk.Entry(root,textvariable=eps_ , width=6,justify="center")
-eps.place(x=XIN,y=4*yS2+10)
-eps.insert("end", 0)
-
-###Geometry
-#Circular Section
-c = tk.Label(root,text="Diameter",font=f_BO9,justify="right")
-c.place(x=XIN-65,y=175+yS)
-c_1 = tk.Label(root,text="[m]",font=f_BO9)
-c_1.place(x=205,y=175+yS)
-
-D_ = tk.StringVar()
-d = tk.Entry(root,textvariable=D_,justify="center",width=6)
-d.place(x=XIN,y=175+yS)
-d.insert("end", 0)
-
-#Rectangular section 
-#W
-r0 = tk.Label(root,text="Width",font=f_BO9,justify="right")
-r0.place(x=XIN-55,y=225+yS)
-r1 = tk.Label(root,text="[m]",font=f_BO9,justify="right")
-r1.place(x=205,y=225+yS)
-W_ = tk.StringVar()
-w = tk.Entry(root,textvariable=W_ , width=6,justify="center")
-w.place(x=XIN,y=225+yS)
-w.insert("end", 0)
-#H
-r2 = tk.Label(root,text="Height",font=f_BO9,justify="right")
-r2.place(x=XIN-55,y=250+yS)
-r3 = tk.Label(root,text="[m]",font=f_BO9,justify="right")
-r3.place(x=205,y=250+yS)
-
-H_ = tk.StringVar()
-h = tk.Entry(root,textvariable=H_ , width=6,justify="center")
-h.place(x=XIN,y=250+yS)
-h.insert("end", 0)
-
-###Section selection 
-sec = tk.IntVar()
-s1 = tk.Radiobutton(root,text="Circular Section",padx = 0,variable=sec,value=1,indicatoron=1)
-s1.configure(font=f_BO9)
-s1.place(x=31,y=150+yS)
-
-s2 = tk.Radiobutton(root,text=" Rectangular Section ",padx = 0,variable=sec,value=2,indicatoron=1)
-s2.configure(font=f_BO9)
-s2.place(x=31,y=200+yS)
-
-#Buttons
-s3 = tk.Button(root,text="Calculate",command=CAL,font=f_BO9)
-s3.config( height = 1, width = 15)
-s3.place(x=280,y=240+yS1)
-
-s4 = tk.Button(root,text="EXIT",command=root.destroy,font=f_BO9)
-s4.config( height = 1, width = 15)
-s4.place(x=280,y=280+yS1)
-
-s5 = tk.Button(root,text='Roughness Table', command=EXA,font=f_BO9)
-s5.place(x=280,y=200+yS1)
-s5.config(height=1, width=15)
-
-#Results
-frame0 = tk.Frame(width=234,height=500, bg="grey", colormap="new",relief="sunken",bd=2)
-frame0.place(x=435,y=yR)
-
-lframe1 = tk.Label(root,text="Density [kg/m\xb3]",font=f_BO9, bg="grey")
-lframe1.place(x=495,y=yR+5)
-frame1 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
-frame1.place(x=450,y=yR+25)
-
-lframe2 = tk.Label(root,text="Dinamic viscosity [Pa s]",font=f_BO9, bg="grey")
-lframe2.place(x=478,y=yR+65)
-frame2 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
-frame2.place(x=450,y=yR+85)
-
-lframe3 = tk.Label(root,text="Kinematic viscosity [m\xb2/s]",font=f_BO9, bg="grey")
-lframe3.place(x=468,y=yR+125)
-frame3 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
-frame3.place(x=450,y=yR+145)
+# L_ = tk.StringVar()
+# L1 = tk.Entry(root,textvariable=L_ , width=6,justify="center")
+# L1.place(x=XIN,y=290+yS)
+# L1.insert("end",1)
 
 
-lframe4 = tk.Label(root,text="Skin Friction Factor [-]",font=f_BO9, bg="grey")
-lframe4.place(x=480,y=yR+185)
-frame4 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
-frame4.place(x=450,y=yR+205)
 
-lframe5 = tk.Label(root,text="Reynolds Number [-]",font=f_BO9, bg="grey")
-lframe5.place(x=492,y=yR+245)
-frame6= tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
-frame6.place(x=450,y=yR+265)
+# #Epsilon selection
+# l4_1 = tk.Label(root,text='_____ Geometric Parameters _______',font=f_BO9)
+# l4_1.place(x=14,y=4*yS2-30)
 
-lframe7 = tk.Label(root,text="Specific Head-Loss [m/m]",font=f_BO9, bg="grey")
-lframe7.place(x=480,y=yR+305)
-frame7 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
-frame7.place(x=450,y=yR+325)
+# l4_2 = tk.Radiobutton(root,text="Wall roughness ",value=1,font=f_BO9)
+# l4_2.place(x=31,y=4*yS2+10)
+# l4_2.select()
+# l4_3 = tk.Label(root,text="[mm]",font=f_BO9)
+# l4_3.place(x=205,y=4*yS2+10)
 
-lframe8 = tk.Label(root,text="Head-Loss [m]",font=f_BO9, bg="grey")
-lframe8.place(x=508,y=yR+365)
-frame8 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
-frame8.place(x=450,y=yR+385)
+# eps_ = tk.StringVar()
+# eps = tk.Entry(root,textvariable=eps_ , width=6,justify="center")
+# eps.place(x=XIN,y=4*yS2+10)
+# eps.insert("end", 0)
 
-lframe9 = tk.Label(root,text="Energy Loss [Pa]",font=f_BO9, bg="grey")
-lframe9.place(x=508,y=yR+425)
-frame9 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
-frame9.place(x=450,y=yR+445)
+# ###Geometry
+# #Circular Section
+# c = tk.Label(root,text="Diameter",font=f_BO9,justify="right")
+# c.place(x=XIN-65,y=175+yS)
+# c_1 = tk.Label(root,text="[m]",font=f_BO9)
+# c_1.place(x=205,y=175+yS)
+
+# D_ = tk.StringVar()
+# d = tk.Entry(root,textvariable=D_,justify="center",width=6)
+# d.place(x=XIN,y=175+yS)
+# d.insert("end", 0)
+
+# #Rectangular section 
+# #W
+# r0 = tk.Label(root,text="Width",font=f_BO9,justify="right")
+# r0.place(x=XIN-55,y=225+yS)
+# r1 = tk.Label(root,text="[m]",font=f_BO9,justify="right")
+# r1.place(x=205,y=225+yS)
+# W_ = tk.StringVar()
+# w = tk.Entry(root,textvariable=W_ , width=6,justify="center")
+# w.place(x=XIN,y=225+yS)
+# w.insert("end", 0)
+# #H
+# r2 = tk.Label(root,text="Height",font=f_BO9,justify="right")
+# r2.place(x=XIN-55,y=250+yS)
+# r3 = tk.Label(root,text="[m]",font=f_BO9,justify="right")
+# r3.place(x=205,y=250+yS)
+
+# H_ = tk.StringVar()
+# h = tk.Entry(root,textvariable=H_ , width=6,justify="center")
+# h.place(x=XIN,y=250+yS)
+# h.insert("end", 0)
+
+# ###Section selection 
+# sec = tk.IntVar()
+# s1 = tk.Radiobutton(root,text="Circular Section",padx = 0,variable=sec,value=1,indicatoron=1)
+# s1.configure(font=f_BO9)
+# s1.place(x=31,y=150+yS)
+
+# s2 = tk.Radiobutton(root,text=" Rectangular Section ",padx = 0,variable=sec,value=2,indicatoron=1)
+# s2.configure(font=f_BO9)
+# s2.place(x=31,y=200+yS)
+
+# #Buttons
+# s3 = tk.Button(root,text="Calculate",command=CAL,font=f_BO9)
+# s3.config( height = 1, width = 15)
+# s3.place(x=280,y=240+yS1)
+
+# s4 = tk.Button(root,text="EXIT",command=root.destroy,font=f_BO9)
+# s4.config( height = 1, width = 15)
+# s4.place(x=280,y=280+yS1)
+
+# s5 = tk.Button(root,text='Roughness Table', command=EXA,font=f_BO9)
+# s5.place(x=280,y=200+yS1)
+# s5.config(height=1, width=15)
+
+# #Results
+# frame0 = tk.Frame(width=234,height=500, bg="grey", colormap="new",relief="sunken",bd=2)
+# frame0.place(x=435,y=yR)
+
+# lframe1 = tk.Label(root,text="Density [kg/m\xb3]",font=f_BO9, bg="grey")
+# lframe1.place(x=495,y=yR+5)
+# frame1 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
+# frame1.place(x=450,y=yR+25)
+
+# lframe2 = tk.Label(root,text="Dinamic viscosity [Pa s]",font=f_BO9, bg="grey")
+# lframe2.place(x=478,y=yR+65)
+# frame2 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
+# frame2.place(x=450,y=yR+85)
+
+# lframe3 = tk.Label(root,text="Kinematic viscosity [m\xb2/s]",font=f_BO9, bg="grey")
+# lframe3.place(x=468,y=yR+125)
+# frame3 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
+# frame3.place(x=450,y=yR+145)
+
+
+# lframe4 = tk.Label(root,text="Skin Friction Factor [-]",font=f_BO9, bg="grey")
+# lframe4.place(x=480,y=yR+185)
+# frame4 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
+# frame4.place(x=450,y=yR+205)
+
+# lframe5 = tk.Label(root,text="Reynolds Number [-]",font=f_BO9, bg="grey")
+# lframe5.place(x=492,y=yR+245)
+# frame6= tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
+# frame6.place(x=450,y=yR+265)
+
+# lframe7 = tk.Label(root,text="Specific Head-Loss [m/m]",font=f_BO9, bg="grey")
+# lframe7.place(x=480,y=yR+305)
+# frame7 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
+# frame7.place(x=450,y=yR+325)
+
+# lframe8 = tk.Label(root,text="Head-Loss [m]",font=f_BO9, bg="grey")
+# lframe8.place(x=508,y=yR+365)
+# frame8 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
+# frame8.place(x=450,y=yR+385)
+
+# lframe9 = tk.Label(root,text="Energy Loss [Pa]",font=f_BO9, bg="grey")
+# lframe9.place(x=508,y=yR+425)
+# frame9 = tk.Frame(height=30,width=200, bg="white", colormap="new",relief="sunken",bd=2)
+# frame9.place(x=450,y=yR+445)
 
 root.mainloop()
 
