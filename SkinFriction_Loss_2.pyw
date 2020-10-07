@@ -6,7 +6,7 @@ email:  v.sammartano@gmail.com
 import numpy as num
 import tkinter as tk
 from tkinter import  messagebox
-from PIL import ImageTk, Image
+#from PIL import ImageTk, Image
 #import os
 
 ###spostare blocco parametri per inserire portata in cfm
@@ -96,36 +96,36 @@ def fluid():
     #print(Fp)
     return Fp
     
-def UFFF1(EPS,dc,Re,V0):
-    global lamb_,RE
-    lamb_= 0
+# def UFFF1(EPS,dc,Re,V0):
+#     global lamb_,RE
+#     lamb_= 0
     
-    #ColebrokWhite Equation
-    #First step - Hyp. fully turbulent flow
-    turbTerm =  EPS/(3.71*dc) #turbulent term
-    lambInf = 0.25 * (num.log10(turbTerm)**2)**-1
-    lamI = lambInf #First value for the friction coefficient
-    errLam = 999 
-    tol  = 1e-14
-    its = 0
-    while (errLam > tol):
-        lamTerm = 2.51/(Re*(lamI**0.5))   
-        lamII = 0.25 * (num.log10(turbTerm + lamTerm)**2)**-1 
-        errLam = num.abs((lamI - lamII)/lamI)
-        lamI = lamII
-        its += 1
-    lamb_ = lamI
-    LAMB = lamb_ 
-    lamb_ = "{:14.14f}".format(lamb_)
-    L5 = tk.Label(root,text=lamb_,font=f_BO10,bg="white",width=22)
-    L5.place(x=455,y=yR+213)
-    model = tk.Label(root,text="Colebrook equation", font=f_BO10)
-    model.place(x=45,y=yR+433)    
-    RE = "{:12.2f}".format(Re)
-    L6 = tk.Label(root,text=RE,font=f_BO10,bg="white",width=22)
-    L6.place(x=455,y=yR+270)
-    #Darcy Module for loss estimation
-    Darcy(LAMB,dc,V0)
+#     #ColebrokWhite Equation
+#     #First step - Hyp. fully turbulent flow
+#     turbTerm =  EPS/(3.71*dc) #turbulent term
+#     lambInf = 0.25 * (num.log10(turbTerm)**2)**-1
+#     lamI = lambInf #First value for the friction coefficient
+#     errLam = 999 
+#     tol  = 1e-14
+#     its = 0
+#     while (errLam > tol):
+#         lamTerm = 2.51/(Re*(lamI**0.5))   
+#         lamII = 0.25 * (num.log10(turbTerm + lamTerm)**2)**-1 
+#         errLam = num.abs((lamI - lamII)/lamI)
+#         lamI = lamII
+#         its += 1
+#     lamb_ = lamI
+#     LAMB = lamb_ 
+#     lamb_ = "{:14.14f}".format(lamb_)
+#     L5 = tk.Label(root,text=lamb_,font=f_BO10,bg="white",width=22)
+#     L5.place(x=455,y=yR+213)
+#     model = tk.Label(root,text="Colebrook equation", font=f_BO10)
+#     model.place(x=45,y=yR+433)    
+#     RE = "{:12.2f}".format(Re)
+#     L6 = tk.Label(root,text=RE,font=f_BO10,bg="white",width=22)
+#     L6.place(x=455,y=yR+270)
+#     #Darcy Module for loss estimation
+#     Darcy(LAMB,dc,V0)
    
 def UFFF(EPS,dc,Re,V0):
     #A New Six Parameter Model to Estimate the Friction Factor
@@ -181,91 +181,85 @@ def calC():
     fp = fluid()
     ni = fp[3]
     modF_ = modF.get()
-    Q0 = float(Q0_.get())
-    D = float(D_.get())
-    if D==0: 
-        messagebox.showwarning("Warning","The diameter has to be greater than 0!")
-    dc = D
-    Ac = 0.25 * num.pi * D**2
     EPS = float(eps_.get())
-    EPS = EPS * 1e-3 # absolute wall roughness
-    if EPS==0: 
-        messagebox.showwarning("Warning","The absolute roughness has to be greater than 0!")
-        
+    D = float(D_.get())
+
+    #Velocity selection
     if modF_ == 1:
-        #print("velocity mode!")
         V0 = float(V0_.get())
-        if V0 == 0:
+        if V0 <= 0:
             messagebox.showwarning("Warning","The velocity has to be greater than 0!")
- 
+        else:
+            if EPS<=0: 
+                messagebox.showwarning("Warning","The absolute roughness has to be greater than 0!")
+            if (D <= 0):
+                messagebox.showwarning("Warning","The diameter has to be greater than 0!")
+            else:
+                dc = D
+                Ac = 0.25 * num.pi * D**2
+                Re = V0 * (dc/ni)
+                UFFF(EPS,dc,Re,V0)
+    #Flow rate                
     if modF_ == 2:
-        #print("flow rate mode!")
-        V0 = Q0/Ac
-        if V0 == 0:      
+        Q0 = float(Q0_.get())
+        if Q0 <= 0:
             messagebox.showwarning("Warning","The flow rate has to be greater than 0!")
-    Re = V0 * (dc/ni)
-    UFFF(EPS,dc,Re,V0)
+        else:
+            if EPS<=0: 
+                messagebox.showwarning("Warning","The absolute roughness has to be greater than 0!")
+            if D<=0:
+                messagebox.showwarning("Warning","The diameter has to be greater than 0!")
+            else:
+                dc = D
+                Ac = 0.25 * num.pi * D**2
+                V0 = Q0/Ac
+                Re = V0 * (dc/ni)
+                UFFF(EPS,dc,Re,V0) 
 
 def calR():
     fp = fluid()
     ni = fp[3]
     modF_ = modF.get()
-    Q0 = float(Q0_.get())
+    EPS = float(eps_.get())
     sA = float(W_.get())    
     sB = float(H_.get())    
-    Ar = sA * sB   # area of the section
-    if Ar==0: 
-        messagebox.showwarning("Warning","The width and height have be greater than 0!")
-    Pr = 2 * (sA + sB) # perimeter of the section
-    dc = 4 * (Ar/Pr) #hydraulic diameter
-    EPS = float(eps_.get())
-    EPS = EPS * 1e-3 # absolute wall roughness
-    if EPS==0: 
-        messagebox.showwarning("Warning","The absolute roughness has to be greater than 0!")
+
     if modF_ == 1:
-        #print("velocity mode!")
         V0 = float(V0_.get())
-        if V0 == 0:
+        if V0 <= 0:
             messagebox.showwarning("Warning","The velocity has to be greater than 0!")
+        else:
+            if EPS==0: 
+                messagebox.showwarning("Warning","The absolute roughness has to be greater than 0!")
+            else:    
+                Ar = sA * sB   # area of the section
+                if Ar<=0:
+                    messagebox.showwarning("Warning","The width and height have be greater than 0!")
+                else:
+                    Pr = 2 * (sA + sB) # perimeter of the section
+                    dc = 4 * (Ar/Pr) #hydraulic diameter
+                    Re = V0 * (dc/ni)
+                    UFFF(EPS,dc,Re,V0)
+ 
     if modF_ == 2:
-       # print("flow rate mode!")
-        V0 = Q0/Ar
-        if V0 == 0:      
+        Q0 = float(Q0_.get())
+        if Q0 <= 0:      
             messagebox.showwarning("Warning","The flow rate has to be greater than 0!")
-    Re = V0 * (dc/ni)
-    UFFF(EPS,dc,Re,V0)
+        else:
+            if EPS==0:
+                messagebox.showwarning("Warning","The absolute roughness has to be greater than 0!")
+            else:
+                Ar = sA * sB   # area of the section
+                if Ar<=0: 
+                    messagebox.showwarning("Warning","The width and height have be greater than 0!")
+                else:
+                    V0 = Q0/Ar
+                    Pr = 2 * (sA + sB) # perimeter of the section
+                    dc = 4 * (Ar/Pr) #hydraulic diameter
+                    Re = V0 * (dc/ni)
+                    UFFF(EPS,dc,Re,V0)
     
     
-def calGen():
-    fp = fluid()
-    ni = fp[3]
-    modF_ = modF.get()
-    Q0 = float(Q0_.get())
-    sA = float(W_.get())    
-    sB = float(H_.get())    
-    Ar = sA * sB   # area of the section
-    if Ar==0: 
-        messagebox.showwarning("Warning","The width and height have be greater than 0!")
-    Pr = 2 * (sA + sB) # perimeter of the section
-    dc = 4 * (Ar/Pr) #hydraulic diameter
-    EPS = float(eps_.get())
-    EPS = EPS * 1e-3 # absolute wall roughness
-    if EPS==0: 
-        messagebox.showwarning("Warning","The absolute roughness has to be greater than 0!")
-    if modF_ == 1:
-        #print("velocity mode!")
-        V0 = float(V0_.get())
-        if V0 == 0:
-            messagebox.showwarning("Warning","The velocity has to be greater than 0!")
-    if modF_ == 2:
-       # print("flow rate mode!")
-        V0 = Q0/Ar
-        if V0 == 0:      
-            messagebox.showwarning("Warning","The flow rate has to be greater than 0!")
-    Re = V0 * (dc/ni)
-    UFFF(EPS,dc,Re,V0)    
-    
-#has to be modified
 def CAL():
     modF_ = modF.get()
     sec_ = sec.get()

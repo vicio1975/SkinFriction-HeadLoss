@@ -1,0 +1,1 @@
+pyinstaller --onefile -w <name_of_the_py_file>
