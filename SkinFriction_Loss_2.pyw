@@ -391,10 +391,6 @@ Q0 = tk.Entry(root,textvariable=Q0_ , width=6,justify="center")
 Q0.place(x=XIN,y=5*yS1)
 Q0.insert("end", 0)
 
-Q1_ = tk.StringVar()
-Q1 = tk.Entry(root,textvariable=Q0_ , width=6,justify="center")
-Q1.place(x=XIN,y=5*yS1)
-Q1.insert("end", 0)
 
 #Epsilon selection
 l4_1 = tk.Label(root,text='_____ Geometric Parameters _______',font=f_BO9)

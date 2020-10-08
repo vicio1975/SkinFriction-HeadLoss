@@ -1,1 +1,2 @@
 pyinstaller --onefile -w <name_of_the_py_file>
+pyinstaller -onefile -i roughness.ico SkinFriction_Loss_2.pyw
