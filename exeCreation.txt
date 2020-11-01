@@ -1,2 +1,4 @@
 pyinstaller --onefile -w <name_of_the_py_file>
-pyinstaller -onefile -i roughness.ico SkinFriction_Loss_2.pyw
+pyinstaller --onefile -i roughness.ico --exclude matplotlib --exclude scipy --exclude pandas --exclude numpy.py SkinFriction_Loss_2.pyw
+
+pyinstaller -w --onefile -i <icon_name>  <name_of_the_py_file>
