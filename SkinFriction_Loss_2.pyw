@@ -18,7 +18,7 @@ root = tk.Tk()
 root.geometry("700x550+100+50")
 root.title("Skin Friction & Head Losses")
 root.resizable(width=False, height=False)
-root.iconbitmap('C:/Icons/roughness.ico')
+#root.iconbitmap('C:/Icons/roughness.ico')
 
 #Fonts
 f_8 = ("arial",8)
