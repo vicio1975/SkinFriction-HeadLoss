@@ -7,14 +7,14 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-EPS = float(input("Set the absloute roughness [mm]  "))
+EPS = float(input("Set the absolute roughness [mm]  "))
 ratio = float(input('Set the ratio (D/eps) '))
             
 dc = 2*EPS*ratio
 print('This is the diameter: ',dc)
 print("This is the Relative roughness: ", EPS/dc)
 
-RE = np.arange(500,5000000,1000)
+RE = np.arange(1000,1000000,100)
 LAMBDA = np.zeros(RE.size)
 LAMBDA2 = np.zeros(RE.size)   
 
