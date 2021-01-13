@@ -1,7 +1,7 @@
 ﻿<< #Friction #HeadLoss #GUI #Python >>
 <<
 
-This is a small code with a proper GUI which allows one to calculate the friction factor and the head loss of a pipeline: the flowing fluid can be either water either air, the section of the duct can be circular or rectangular. The estimation of the skin friction factor is done considering a multi-parametric formula (Díaz‐Damacillo and Plascencia, 2019).
+This is a small code with a proper GUI which allows one to calculate the friction factor and the head loss of a pipeline: the flowing fluid can be either water either air, the section of the duct can be circular, rectangular or irregular. The estimation of the skin friction factor is done considering a multi-parametric formula (Díaz‐Damacillo and Plascencia, 2019).
 
 The model is based on assuming the residual stresses due to the laminar to turbulent flow transition by two distinct contributions: the first is attributed to the flow velocity (Reynolds number) and the second to the duct roughness. Compared to other models, this new equation gives the best fit with respect of Nikuradse’s results.
 
