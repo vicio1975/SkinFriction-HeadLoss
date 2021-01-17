@@ -529,8 +529,8 @@ Q0.insert('end',0)
 Q0.configure(state='disabled')
 
 #####Geometry settings
-#Lenght
-L0 = tk.Label(frame01,text="Duct Lenght",font=f_H12)
+#Length
+L0 = tk.Label(frame01,text="Duct Length",font=f_H12)
 L0.grid(row = 0, column = 0,padx=10,pady =5)
 L_ = tk.StringVar()
 L1 = tk.Entry(frame01,textvariable = L_ , width = 6, justify="center",font=f_H12)
