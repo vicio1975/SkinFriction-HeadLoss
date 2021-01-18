@@ -40,7 +40,7 @@ f_H08 = font.Font(family='Helvetica', size=8, weight='normal')
 font.families()
 
 ####Frames texts
-text0 = "Physic and Kinetic Parameters"
+text0 = "Fluid Parameters"
 text1 = "Duct Geometry"
 text2 = "Cross Section Definition"
 text3 = "Results"
@@ -53,7 +53,7 @@ right_side.grid(row=0,column=1,rowspan=2, sticky="nsew")
 bottom_frame = tk.Frame(root)
 bottom_frame.grid(row=2, column=0, columnspan=2, sticky="ew")
 
-#Subframes - "Physic and Kinetic Parameters"
+#Subframes - "Fluid Parameters"
 frame00 = tk.LabelFrame(left_side,text=text0,width=450,height=150,font=f_H12B) 
 frame00.grid(row=0, column=0,padx=15,pady=10,ipadx=20,ipady=5)
 frame00.config(borderwidth=4)
