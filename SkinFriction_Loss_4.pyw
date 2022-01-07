@@ -466,7 +466,7 @@ def table():
     root2.mainloop()
     
 def EX():
-    root.destroy()
+    #root.destroy()
     try:
         fin2
     except NameError:
@@ -474,8 +474,9 @@ def EX():
         if var_exists: print("Window does not exist")
     else:
         root2.destroy()
-    
-      
+
+def EX_out():
+    root.destroy()
    
 # ##end of Functions
 # ##########################################
@@ -647,7 +648,7 @@ s4 = tk.Button(bottom_frame,text="Calculate",command=CAL,font=f_H12)
 s4.config( height = 1, width = 15)
 s4.grid(row=0,column=1,padx=20,pady=15,ipadx=40)
 
-s5 = tk.Button(bottom_frame,text="EXIT",command=EX,font=f_H12)
+s5 = tk.Button(bottom_frame,text="EXIT",command=EX_out,font=f_H12)
 s5.config( height = 1, width = 15)
 s5.grid(row=0,column=2,padx=20,pady=15,ipadx=40)    
 ######################
