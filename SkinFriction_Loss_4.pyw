@@ -451,7 +451,7 @@ def table():
     root2.title('Roughness Values')
     root2.geometry("450x550+900+50")
     root2.resizable(width=False, height=False)
-    root2.iconbitmap('C:/Icons/roughness.ico')
+    root2.iconbitmap('roughness.ico')
     
     label1 = tk.Label(root2,text=tit,font=('Helvetica', 14, 'normal'))
     label1.pack()
