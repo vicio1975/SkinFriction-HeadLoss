@@ -15,6 +15,6 @@ Go here to install Python 3.4.4.amd64.msi
 https://www.python.org/ftp/python/3.4.4/python-3.4.4.amd64.msi
 
 
-Díaz‐Damacillo, L. and Plascencia, G. (2019), A new six parameter model to estimate the friction factor. AIChE J, 65: 1144-1148. https://doi.org/10.1002/aic.16535
+DíaznDamacillo, L. and Plascencia, G. (2019), A new six parameter model to estimate the friction factor. AIChE J, 65: 1144-1148. https://doi.org/10.1002/aic.16535
 
 >>

@@ -2,15 +2,13 @@
 """
 Created by Vincenzo Sammartano
 email:  v.sammartano@gmail.com
+Last Update: Added the formulation section 
 """
 import numpy as num
 import tkinter as tk
 from tkinter import  messagebox
 from tkinter import font
-#from decimal import Decimal, getcontext
-#from tkinter import PhotoImage
-#from PIL import ImageTk, Image
-#import os
+import webbrowser
 ##########################################
 
 #Constants
@@ -25,10 +23,10 @@ flu_opt = ['Air','Water']
 
 #Tkinter Window
 root = tk.Tk()
-root.geometry("800x690+100+50")
+root.geometry("800x770+100+50")
 root.title("Skin Friction & Head Losses")
 root.resizable(width=False, height=False)
-root.iconbitmap('roughness.ico')
+#root.iconbitmap('roughness.ico')
 ##########################################
 
 #Fonts
@@ -37,6 +35,8 @@ f_H12 = font.Font(family='Helvetica', size=12, weight='normal')
 f_H11 = font.Font(family='Helvetica', size=11, weight='bold')
 f_H10 = font.Font(family='Helvetica', size=10, weight='bold')
 f_H08 = font.Font(family='Helvetica', size=8, weight='normal')
+f_Ref = font.Font(family='Helvetica', size=12, weight='normal', underline=1)
+
 font.families()
 
 ####Frames texts
@@ -44,6 +44,7 @@ text0 = "Fluid Parameters"
 text1 = "Duct Geometry"
 text2 = "Cross Section Definition"
 text3 = "Results"
+text4 = "Formulation"
 
 #main Frames
 left_side = tk.Frame(root,width=500)
@@ -69,7 +70,14 @@ frame02.config(borderwidth=4)
 frame03 = tk.LabelFrame(right_side,text=text3,width=350,font=f_H12B)
 frame03.grid(row=0,column=0,padx=15,pady=10,ipadx=4,ipady=4)
 frame03.config(borderwidth=4)
-
+#Subframes - "Formulation"
+frame04 = tk.LabelFrame(bottom_frame,text=text4,width=50,font=f_H12B)
+frame04.pack(padx=5,pady=5)
+frame04.config(borderwidth=4)
+#Subframes - "Buttons"
+frame05 = tk.LabelFrame(bottom_frame,text="",width=50,font=f_H12B)
+frame05.pack(padx=5,pady=5)
+frame05.config(borderwidth=4)
 ##########################################
 
 ##Functions
@@ -109,7 +117,37 @@ def fluid():
 
     return Fp
    
-def UFFF(EPS,dc,Re,V):
+def UFFF1(EPS,dc,Re,V):
+    lamb_= 0
+    ff = fluid()
+    L = float(L_.get())
+    #ColebrokWhite Equation
+    #First step - Hyp. fully turbulent flow
+    turbTerm =  EPS/(3.71*dc) #turbulent term
+    lambInf = 0.25 * (num.log10(turbTerm)**2)**-1
+    lamI = lambInf #First value for the friction coefficient
+    errLam = 999
+    tol  = 1e-14
+    its = 0
+    while (errLam > tol):
+        lamTerm = 2.51/(Re*(lamI**0.5))
+        lamII = 0.25 * (num.log10(turbTerm + lamTerm)**2)**-1
+        errLam = num.abs((lamI - lamII)/lamI)
+        lamI = lamII
+        its += 1
+    lamb_ = lamI
+    LAMB = lamb_
+
+    ####DarcyWeisbach Equation
+    J = (LAMB/dc)* V**2/(2*g) #Specific Losses in m/m
+    HeadLoss = J*L #Total Losses in m
+    HeadLossPa = HeadLoss * ff[1] #Total losses in Pa
+
+    global RES
+    RES = [dc,Re,LAMB,J,HeadLoss,HeadLossPa]
+    printOut()
+
+def UFFF2(EPS,dc,Re,V):
     #A New Six Parameter Model to Estimate the Friction Factor
  
     ff = fluid()
@@ -136,7 +174,6 @@ def UFFF(EPS,dc,Re,V):
     RES = [dc,Re,LAMB,J,HeadLoss,HeadLossPa]
 
     printOut()
-
 
 def printOut():
    
@@ -172,7 +209,8 @@ def calC():
                 dc = D
                 Ac = 0.25 * num.pi * D**2
                 Re = V0 * (dc/ni)
-                UFFF(EPS,dc,Re,V0)
+                if modForm.get()==1: UFFF1(EPS,dc,Re,V0)
+                elif modForm.get()==2: UFFF2(EPS,dc,Re,V0)
     #Flow rate                
     if modF_ == 2:
         Q0 = float(Q0_.get())
@@ -188,7 +226,8 @@ def calC():
                 Ac = 0.25 * num.pi * D**2
                 V0 = Q0/Ac
                 Re = V0 * (dc/ni)
-                UFFF(EPS,dc,Re,V0) 
+                if modForm.get()==1: UFFF1(EPS,dc,Re,V0)
+                elif modForm.get()==2: UFFF2(EPS,dc,Re,V0)
 
 def calR():
     fp = fluid()
@@ -213,7 +252,8 @@ def calR():
                     Pr = 2 * (sA + sB) # perimeter of the section
                     dc = 4 * (Ar/Pr) #hydraulic diameter
                     Re = V0 * (dc/ni)
-                    UFFF(EPS,dc,Re,V0)
+                    if modForm.get()==1: UFFF1(EPS,dc,Re,V0)
+                    elif modForm.get()==2: UFFF2(EPS,dc,Re,V0)
    
     if modF_ == 2:
         Q0 = float(Q0_.get())
@@ -231,7 +271,8 @@ def calR():
                     Pr = 2 * (sA + sB) # perimeter of the section
                     dc = 4 * (Ar/Pr) #hydraulic diameter
                     Re = V0 * (dc/ni)
-                    UFFF(EPS,dc,Re,V0)
+                    if modForm.get()==1: UFFF1(EPS,dc,Re,V0)
+                    elif modForm.get()==2: UFFF2(EPS,dc,Re,V0)
     
 def calGen():
     fp = fluid()#
@@ -254,7 +295,9 @@ def calGen():
                 else:
                     dc = 4 * (Ar/Pr) #hydraulic diameter
                     Re =V0*(dc/ni)
-                    UFFF(EPS,dc,Re,V0)    
+                    if modForm.get()==1: UFFF1(EPS,dc,Re,V0)
+                    elif modForm.get()==2: UFFF2(EPS,dc,Re,V0)
+                    
     if modF_ == 2:
         Q0 = float(Q0_.get())
         if Q0 <= 0:      
@@ -270,7 +313,8 @@ def calGen():
                     dc = 4 * (Ar/Pr) #hydraulic diameter
                     V0 = Q0/Ar
                     Re =V0*(dc/ni)
-                    UFFF(EPS,dc,Re,V0)    
+                    if modForm.get()==1: UFFF1(EPS,dc,Re,V0)
+                    elif modForm.get()==2: UFFF2(EPS,dc,Re,V0)
       
 def CAL():
     modF_ = modF.get()
@@ -419,6 +463,21 @@ def ACTF():
         f3_1.config(fg='black')
         l2.config(fg='gray')
         l2_1.config(fg='gray')
+        
+def ACTF2():
+    if modForm.get() == 1:
+        for1.config(state='normal')
+        for1.config(fg='black')
+        for2.config(fg='gray')
+    
+    if modForm.get() == 2:
+        for2.config(state='normal') 
+        for1.config(fg='gray')
+        for2.config(fg='black')
+
+#Define a callback function
+def callback(url):
+   webbrowser.open_new_tab(url)
 
 def table():
 
@@ -628,6 +687,21 @@ PPU.config(fg='gray')
 AA.config(fg='gray')
 AAU.config(fg='gray')
 
+#Formulation selection CooleBrookWhite or SixParamters equation
+modForm = tk.IntVar()
+for1 = tk.Radiobutton(frame04, text="Colebrook-White Equation", padx = 10, variable=modForm , value=1, font=f_H12)
+for1.grid(row=4, column=0, sticky='W')
+for1.configure(command=ACTF2, indicatoron=1)
+for1.select()
+for1.configure(state='normal')
+
+for2 = tk.Radiobutton(frame04,text="Six-Factors Equation", padx = 10, variable=modForm, value=2,font=f_H12)
+for2.grid(row=4,column=1,sticky='W')
+for2.configure(command=ACTF2)
+for2.config(fg='gray')
+link = tk.Label(frame04,text="References", padx = 5, font = f_Ref, fg='#000080')
+link.grid(row=4,column=2,sticky='W')
+link.bind("<Button-1>", lambda e: callback("https://doi.org/10.1002/aic.16535"))
 
 # #Results
 VarList = ['Density [kg/m\xb3]','Specific weight [N/m\xb3]','Dinamic viscosity [Pa s]','Kinematic viscosity [m\xb2/s]',
@@ -638,19 +712,18 @@ for i,var in enumerate(VarList):
     tk.Frame(frame03,height=35,width=150, colormap="new",relief="sunken",bd=2).grid(row=i,column=1,sticky="E",padx=18,pady=11)
 
 
-
 ###############Buttons
-s3 = tk.Button(bottom_frame,text='Roughness Table', command=table,font=f_H12)
-s3.config(height=1, width=15)
-s3.grid(row=0,column=0,padx=20,pady=15,ipadx=40)
+##s3 = tk.Button(frame05,text='Roughness Table', command=table,font=f_H12)
+##s3.config(height=1, width=15)
+##s3.grid(row=0,column=0,padx=10,pady=10,ipadx=20)
 
-s4 = tk.Button(bottom_frame,text="Calculate",command=CAL,font=f_H12)
+s4 = tk.Button(frame05,text="Calculate",command=CAL,font=f_H12)
 s4.config( height = 1, width = 15)
-s4.grid(row=0,column=1,padx=20,pady=15,ipadx=40)
+s4.grid(row=0,column=1,padx=10,pady=10,ipadx=20)
 
-s5 = tk.Button(bottom_frame,text="EXIT",command=EX_out,font=f_H12)
+s5 = tk.Button(frame05,text="EXIT",command=EX_out,font=f_H12)
 s5.config( height = 1, width = 15)
-s5.grid(row=0,column=2,padx=20,pady=15,ipadx=40)    
+s5.grid(row=0,column=2,padx=10,pady=10,ipadx=20)    
 ######################
 
     
